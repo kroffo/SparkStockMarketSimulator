@@ -1,8 +1,5 @@
 package controllers;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import static spark.Spark.*;
 import models.Company;
 import org.json.JSONException;
@@ -10,23 +7,20 @@ import org.json.JSONObject;
 
 public class Companies {
 
-    private static HashMap<String, Company> companies = new HashMap<>();
-
     public static String getCompanies(spark.Request req, spark.Response res) {
-        Set<String> keySet = companies.keySet();
-        String[] keys = keySet.toArray( new String[keySet.size()] );
 
+        Company[] companies = Company.getCompanies();
         String json = "[\n";
 
-        for(int i=0; i<keys.length; ++i) {
-            Company c = companies.get(keys[i]);
+        for(int i=0; i<companies.length; ++i) {
+            Company c = companies[i];
             json += "  {\n";
             json += "    \"name\": \"" + c.getName() + "\",\n";
             json += "    \"symbol\": \"" + c.getSymbol() + "\",\n";
             json += "    \"price\": " + c.getPrice() + ",\n";
             json += "    \"stocks\": " + c.getNumberOfAvailableStocks() + "\n";
             json += "  }";
-            if(i < keys.length - 1)
+            if(i < companies.length - 1)
                 json += ",";
             json += "\n";
         }
@@ -36,8 +30,11 @@ public class Companies {
         return json;
     }
 
+    // In the below methods, return null is called after all halts to prevent compilers from thinking
+    // JSON objects are not initialized when they are used.
+
     public static String getCompany(spark.Request req, spark.Response res, String symbol) {
-        Company c = companies.get(symbol);
+        Company c = Company.load(symbol);
         if(c != null) {
             res.status(200);
             String json = "{\n";
@@ -48,7 +45,7 @@ public class Companies {
             json += "}";
             return json;
         } else {
-            res.status(404);
+            halt(404, "Company with symbol \"" + symbol + "\" does not exist.");
             return null;
         }
     }
@@ -58,61 +55,64 @@ public class Companies {
         try {
             obj = new JSONObject(req.body());
         } catch(JSONException e) {
-            res.status(400);
-            return "Request body must be valid JSON.";
+            halt(400, "Request must be valid JSON");
+            return null;
         }
-        String name = obj.getString("name");
-        String symbol = obj.getString("symbol");
+        String name = obj.has("name") ? obj.getString("name") : null;
+        String symbol = obj.has("symbol") ? obj.getString("symbol") : null;
         if(name == null || name.equals("")) {
-            res.status(400);
-            return "Missing parameter \"name\".";
+            halt(400, "Missing parameter \"name\".");
+            return null;
         }
         if(symbol == null || symbol.equals("")) {
-            res.status(400);
-            return "Missing parameter \"symbol\".";
+            halt(400, "Missing parameter \"symbol\".");
+            return null;
+        } else if(symbol.contains(" ")) {
+            halt(400, "Parameter \"symbol\" must not contain any spaces.");
+            return null;
         }
-        Company c = companies.get(symbol);
+        Company c = Company.load(symbol);
         if(c != null) {
-            res.status(409);
-            return "Company with symbol \"" + symbol + "\" already exists.";
+            halt(409, "Company with symbol \"" + symbol + "\" already exists.");
+            return null;
         }
-        c = new Company(name, symbol);
-        companies.put(symbol, c);
+        c = Company.addCompany(name, symbol);
         res.status(201);
         return "Company \"" + symbol + "\" created.";
     }
 
     public static String deleteCompany(spark.Request req, spark.Response res, String symbol) {
-        if(companies.get(symbol) != null) {
+        Company c = Company.load(symbol);
+        if(c != null) {
             res.status(200);
-            companies.remove(symbol);
+            c.delete();
             return "Company \"" + symbol + "\" deleted.";
         } else {
-            res.status(404);
+            halt(404, "Company with symbol \"" + symbol + "\" does not exist.");
             return null;
         }
     }
 
     public static String updateCompany(spark.Request req, spark.Response res, String symbol) {
-        Company c = companies.get(symbol);
+        Company c = Company.load(symbol);
         if(c == null) {
-            res.status(404);
+            halt(404, "Company with symbol \"" + symbol + "\" does not exist.");
             return null;
         }
         JSONObject obj;
         try {
             obj = new JSONObject(req.body());
         } catch(JSONException e) {
-            res.status(400);
-            return "Request body must be valid JSON.";
+            halt(400, "Request body must be valid JSON.");
+            return null;
         }
         String name = obj.getString("name");
         if(name == null || name.equals("")) {
-            res.status(400);
-            return "Missing parameter \"name\".";
+            halt(400, "Missing parameter \"name\".");
+            return null;
         }
         c.updateName(name);
         res.status(200);
-        return "Name for company \"" + symbol + "\" updated to \"" + name + ".";
+        return "Name for company \"" + symbol + "\" updated to \"" + name + "\".";
     }
 }

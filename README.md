@@ -12,4 +12,5 @@ CREATE TABLE  Companies (
     availableStocks INT,
     PRIMARY KEY(ID)
 );
+GRANT ALL ON sparkstocksim.* TO 'sparkstocksimuser' IDENTIFIED BY 'sparkstocksimpassword';
 ```
