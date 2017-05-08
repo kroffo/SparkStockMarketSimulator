@@ -122,14 +122,13 @@ public class Company {
     }
 
     public static Company[] getCompanies() {
-        ArrayList<Company> companies = null;
+        ArrayList<Company> companies = new ArrayList<>();
         try (
                 Connection conn = DBConnector.getConnection();
                 Statement statement = conn.createStatement();
                 ResultSet rs = statement.executeQuery("SELECT * FROM Companies;");
         ) {
             while(rs.next()) {
-                if(companies == null) companies = new ArrayList<>();
                 String n = rs.getString("name");
                 String sym = rs.getString("symbol");
                 double sv = rs.getDouble("stockValue");
@@ -138,7 +137,7 @@ public class Company {
             }
             return companies.toArray(new Company[companies.size()]);
         } catch(SQLException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }

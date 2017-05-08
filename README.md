@@ -12,5 +12,14 @@ CREATE TABLE  Companies (
     availableStocks INT,
     PRIMARY KEY(ID)
 );
+
+CREATE TABLE Users (
+    ID int NOT NULL AUTO_INCREMENT,
+    name VARCHAR(40) UNIQUE,
+    password VARCHAR(40),
+    money DOUBLE PRECISION,
+    PRIMARY KEY(ID)
+);
+
 GRANT ALL ON sparkstocksim.* TO 'sparkstocksimuser' IDENTIFIED BY 'sparkstocksimpassword';
 ```
