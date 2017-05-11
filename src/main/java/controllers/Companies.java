@@ -17,7 +17,7 @@ public class Companies {
             json += "  {\n";
             json += "    \"name\": \"" + c.getName() + "\",\n";
             json += "    \"symbol\": \"" + c.getSymbol() + "\",\n";
-            json += "    \"price\": " + c.getPrice() + ",\n";
+            json += "    \"price\": " + String.format( "%.2f", c.getPrice()) + ",\n";
             json += "    \"stocks\": " + c.getNumberOfAvailableStocks() + "\n";
             json += "  }";
             if(i < companies.length - 1)
@@ -40,7 +40,7 @@ public class Companies {
             res.status(200);
             String json = "{\n";
             json += "  \"name\": \"" + c.getName() + "\",\n";
-            json += "  \"symbol\": \"" + c.getSymbol() + "\",\n";
+            json += "  \"symbol\": \"" + String.format( "%.2f", c.getPrice()) + "\",\n";
             json += "  \"price\": " + c.getPrice() + ",\n";
             json += "  \"stocks\": " + c.getNumberOfAvailableStocks() + "\n";
             json += "}";

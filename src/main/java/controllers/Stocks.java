@@ -25,7 +25,7 @@ public class Stocks {
                 Stock stock = stocks[i];
                 json += "  \"" + stock.getCompanySymbol() + "\": {\n";
                 json += "    \"stocks\": " + stock.getNumberStocks() + ",\n";
-                json += "    \"averagePrice\": " + stock.getAveragePrice() + "\n";
+                json += "    \"averagePrice\": " + String.format( "%.2f", stock.getAveragePrice()) + "\n";
                 json += "  }";
                 if(i < stocks.length-1)
                     json += ",";
@@ -52,7 +52,7 @@ public class Stocks {
         }
         String json = "{\n";
         json += "  \"stocks\": " + stock.getNumberStocks() + ",\n";
-        json += "  \"averagePrice\": " + stock.getAveragePrice() + ",\n";
+        json += "  \"averagePrice\": " + String.format( "%.2f", stock.getAveragePrice()) + ",\n";
         json += "}";
         return json;
     }

@@ -17,7 +17,7 @@ public class Users {
             json += "  {\n";
             json += "    \"name\": \"" + u.getName() + "\",\n";
             json += "    \"password\": \"" + u.getPassword() + "\",\n";
-            json += "    \"money\": " + u.getMoney() + "\n";
+            json += "    \"money\": " + String.format( "%.2f", u.getMoney()) + "\n";
             json += "  }";
             if(i < users.length - 1)
                 json += ",";
@@ -36,7 +36,7 @@ public class Users {
             String json = "{\n";
             json += "  \"name\": \"" + u.getName() + "\",\n";
             json += "  \"password\": \"" + u.getPassword() + "\",\n";
-            json += "  \"money\": " + u.getMoney() + "\n";
+            json += "  \"money\": " + String.format( "%.2f", u.getMoney()) + "\n";
             json += "}";
             return json;
         } else {
