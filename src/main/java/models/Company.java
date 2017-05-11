@@ -50,6 +50,14 @@ public class Company {
         return numberOfAvailableStocks;
     }
 
+    public void removeStock() {
+        --numberOfAvailableStocks;
+    }
+
+    public void addStock() {
+        ++numberOfAvailableStocks;
+    }
+
     public double getPrice() {
         return price;
     }

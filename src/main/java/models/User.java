@@ -39,6 +39,14 @@ public class User {
         return money;
     }
 
+    public void purchase(double price) {
+        money -= price;
+    }
+
+    public void sell(double price) {
+        money += price;
+    }
+
     public void updatePassword(String p) {
         password = p;
         this.update();
@@ -48,11 +56,11 @@ public class User {
         try (
                 Connection conn = DBConnector.getConnection();
                 Statement statement = conn.createStatement();
-                ) {
+        ) {
             statement.executeUpdate("INSERT INTO Users (name, password, money) VALUES('"
-            + this.name + "','"
-            + this.password + "',"
-                            +this.money + ");"
+                    + this.name + "','"
+                    + this.password + "',"
+                    + this.money + ");"
             );
         } catch (SQLException e) {
             return false;
@@ -64,10 +72,11 @@ public class User {
         try (
                 Connection conn = DBConnector.getConnection();
                 Statement statement = conn.createStatement();
-                ) {
+        ) {
             statement.executeUpdate("UPDATE Users SET "
-            + "password='" + this.password + "' "
-            + "WHERE name='" + this.name + "';"
+                    + "password='" + this.password + "', "
+                    + "money=" + this.money + " "
+                    + "WHERE name='" + this.name + "';"
             );
         } catch(SQLException e) {
             return false;

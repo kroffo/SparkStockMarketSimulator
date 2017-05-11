@@ -21,5 +21,13 @@ CREATE TABLE Users (
     PRIMARY KEY(ID)
 );
 
+CREATE TABLE Stocks (
+    userName VARCHAR(40),
+    companySymbol VARCHAR(10),
+    stocks INT,
+    averagePrice DOUBLE PRECISION,
+    PRIMARY KEY(userName, companySymbol)
+);
+
 GRANT ALL ON sparkstocksim.* TO 'sparkstocksimuser' IDENTIFIED BY 'sparkstocksimpassword';
 ```

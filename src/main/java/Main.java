@@ -14,5 +14,8 @@ public class Main {
         post("users", (req, res) -> Users.addUser(req, res));
         delete("users/:name", (req, res) -> Users.deleteUser(req, res, req.params(":name")));
         put("users/:name", (req, res) -> Users.updateUser(req, res, req.params(":name")));
+        get("/users/:name/stocks", (req, res) -> Stocks.getStocks(req, res, req.params(":name")));
+        get("/users/:name/stocks/:sym", (req, res) -> Stocks.getStock(req, res, req.params(":name"), req.params("sym")));
+        post("/users/:name/stocks/:sym", (req, res) -> Stocks.performAction(req, res, req.params(":name"), req.params("sym")));
     }
 }
