@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class Companies {
 
     public static String getCompanies(spark.Request req, spark.Response res) {
-
+        Company.updatePrices();
         Company[] companies = Company.getCompanies();
         String json = "[\n";
 
@@ -34,6 +34,7 @@ public class Companies {
     // JSON objects are not initialized when they are used.
 
     public static String getCompany(spark.Request req, spark.Response res, String symbol) {
+        Company.updatePrices();
         Company c = Company.load(symbol);
         if(c != null) {
             res.status(200);

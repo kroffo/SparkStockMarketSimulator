@@ -148,4 +148,13 @@ public class Company {
             throw new RuntimeException(e);
         }
     }
+
+    public static void updatePrices() {
+        Company[] companies = getCompanies();
+        int length = companies.length;
+        String[] symbols = new String[length];
+        for(int i=0; i<length; ++i)
+            symbols[i] = companies[i].getSymbol();
+        StockReader.updateStocks(symbols);
+    }
 }

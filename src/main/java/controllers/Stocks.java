@@ -58,6 +58,7 @@ public class Stocks {
     }
 
     public static String performAction(spark.Request req, spark.Response res, String name, String symbol) {
+        Company.updatePrices();
         User user = User.load(name);
         Company company = Company.load(symbol);
         if (user == null) {
